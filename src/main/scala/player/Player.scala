@@ -6,8 +6,8 @@ import ship.Ship
 /**
   * abstract
   */
-abstract class Player {
-  var ships: List[Ship]
-  var shotRecord: List[Square]
+abstract class Player(val ships: List[Ship], val shotRecord: List[Square]) {
   def shoot(square: Square)
+
+  def myOwnCopy(ships: List[Ship], shotRecord: List[Square]): Player
 }
