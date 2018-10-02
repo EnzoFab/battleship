@@ -1,8 +1,20 @@
 package ship
 import grid.Square
 
-case class BattleShip(x: Int, y: Int, orientation: String) extends Ship {
-  override val shipSize: Int = 4
-  override val shipName: String = "BattleShip"
-  override var positions: List[Square] = create(x, y, orientation, 0)
+class BattleShip(positions: List[Square], shipSize: Int, shipName: String)
+  extends Ship(positions, shipSize, shipName) {
+
+  override def copy(positions: List[Square],
+                    shipSize: Int, shipName: String): BattleShip =
+    new BattleShip(positions, shipSize, shipName)
+
 }
+
+object BattleShip {
+  def apply(x: Int, y: Int, orientation: String): BattleShip = {
+    val l = Ship.createList(x, y, orientation, 4, "BattleShip")
+    new BattleShip(l, 4, "BattleShip")
+  }
+}
+
+

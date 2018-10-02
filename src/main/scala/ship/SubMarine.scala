@@ -1,8 +1,17 @@
 package ship
 import grid.Square
 
-class SubMarine(x: Int, y: Int, orientation: String) extends Ship {
-  override val shipSize: Int = 3
-  override val shipName: String = "SubMarine"
-  override var positions: List[Square] = create(x, y, orientation, 0)
+class SubMarine(positions: List[Square], shipSize: Int, shipName: String)
+  extends Ship(positions, shipSize, shipName) {
+
+  override def copy(positions: List[Square],
+                    shipSize: Int, shipName: String): SubMarine =
+    new SubMarine(positions, shipSize, shipName)
+}
+
+object SubMarine {
+  def apply(x: Int, y: Int, orientation: String): SubMarine = {
+    val l = Ship.createList(x, y, orientation, 3, "SubMarine")
+    new SubMarine(l, 3, "SubMarine")
+  }
 }
