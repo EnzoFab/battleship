@@ -9,5 +9,11 @@ import ship.Ship
 abstract class Player(val ships: List[Ship], val shotRecord: List[Square]) {
   def shoot(square: Square)
 
-  def myOwnCopy(ships: List[Ship], shotRecord: List[Square]): Player
+  /**
+    * custom copy method
+     * @param ships
+    * @param shotRecord
+    * @return
+    */
+  def myOwnCopy(ships: List[Ship] = ships, shotRecord: List[Square] = shotRecord): Player
 }
