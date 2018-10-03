@@ -13,6 +13,18 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 
 
 	/**
+	A ship is sinked if all its square are touched
+		**/
+	def isSinked: Boolean = {
+		def isSinkInt(l: List[Square]): Boolean = {
+			if(l.tail.isEmpty) l.head.isTouched
+			else l.head.isTouched && isSinkInt(l.tail)
+		}
+
+		isSinkInt(positions)
+	}
+
+	/**
 	@param ship
 	return True if the ship given in parameter share one or several position with the current ship
 	**/
@@ -41,17 +53,6 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 		overLapsList(positions, ship.positions)
 	}
 
-	/**
-		A ship is sinked if all its square are touched
-	**/
-	def isSinked: Boolean = {
-		def isSinkInt(l: List[Square]): Boolean = {
-			if(l.tail.isEmpty) l.head.isTouched
-			else l.head.isTouched && isSinkInt(l.tail)
-		}
-
-		isSinkInt(positions)
-	}
 
 	/**
 		* Check if the the
