@@ -10,7 +10,7 @@ class SubMarine(positions: List[Square], shipSize: Int, shipName: String)
 }
 
 object SubMarine {
-  def apply(x: Int, y: Int, orientation: String): SubMarine = {
+  def apply(x: Char, y: Int, orientation: String): SubMarine = {
     val l = Ship.createList(x, y, orientation, 3, "SubMarine")
     new SubMarine(l, 3, "SubMarine")
   }

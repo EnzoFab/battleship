@@ -10,7 +10,7 @@ class Carrier(positions: List[Square], shipSize: Int, shipName: String)
 }
 
 object Carrier {
-  def apply(x: Int, y: Int, orientation: String): Carrier = {
+  def apply(x: Char, y: Int, orientation: String): Carrier = {
     val l = Ship.createList(x, y, orientation, 5, "Carrier")
     new Carrier(l, 5, "Carrier")
   }

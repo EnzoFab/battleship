@@ -4,8 +4,8 @@ import grid.Square
 import ship.Ship
 
 class HPlayer(name: String = "No Name",
-                   override val ships: List[Ship], override val shotRecord: List[Square])
-extends Player(ships, shotRecord) {
+              override val navy: List[Ship], override val shotRecord: List[Square])
+extends Player(navy, shotRecord) {
 
   override def shoot(square: Square): Unit = ???
 
@@ -20,5 +20,5 @@ extends Player(ships, shotRecord) {
 object HPlayer{
   def apply(name: String, ships:
   List[Ship] = Nil, shotRecord: List[Square] = Nil): HPlayer
-  = HPlayer(name, ships, shotRecord)
+  = new HPlayer(name, ships, shotRecord)
 }

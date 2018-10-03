@@ -23,24 +23,24 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 			check if the current square is equals to at list one square of the list 
 		**/
 		@tailrec
-		 def overLapsSquare(sq: Square, l2: List[Square]): Boolean = {
+		 def overLapsSquare(sq: Square, l2: List[Square], ship: Ship): Boolean = {
 			if (l2.tail.isEmpty) {
 				sq.equals(l2.head) 
 			} else {
-				sq.equals(l2.head) || overLapsSquare(sq, l2.tail)
+				sq.equals(l2.head) || overLapsSquare(sq, l2.tail, ship)
 			}
 		}
 
 		@tailrec
-		def overLapsList(l1: List[Square], l2: List[Square]): Boolean = {
+		def overLapsList(l1: List[Square], l2: List[Square], ship: Ship): Boolean = {
 			if (l1.tail.isEmpty) {
-				overLapsSquare(l1.head, l2)
+				overLapsSquare(l1.head, l2, ship)
 			} else {
-				overLapsSquare(l1.head, l2) || overLapsList(l1.tail, l2)
+				overLapsSquare(l1.head, l2, ship) || overLapsList(l1.tail, l2, ship)
 			}
 		}
 
-		overLapsList(positions, ship.positions)
+		overLapsList(positions, ship.positions, ship)
 	}
 
 	/**
@@ -97,7 +97,16 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
   def copy(positions: List[Square] = positions,
            shipSize: Int = shipSize,
            shipName: String = shipName): Ship
-	
+
+	override def toString = {
+
+		def displayShip(list: List[Square]): String = {
+			if (list.isEmpty) ""
+			else list.head.coordX + " " + list.head.coordY + "\n" + displayShip(list.tail)
+		}
+
+		displayShip(positions)
+	}
 }
 
 object Ship{
@@ -108,8 +117,8 @@ object Ship{
 		* @param y
 		* @param orientation
 		*/
-	def createList(x: Int, y: Int, orientation: String, size: Int, shipName: String): List[Square] = {
-		var newX: Int = x
+	def createList(x: Char, y: Int, orientation: String, size: Int, shipName: String): List[Square] = {
+		var newX: Char = x
 		var newY: Int = y
 
 		orientation.toUpperCase() match {
@@ -120,10 +129,10 @@ object Ship{
 				newY -= 1
 			}
 			case "L" => { // left
-				newX -= 1
+				newX = (newX.toInt - 1).toChar // go to the previous letter
 			}
 			case "R" => { // right
-				newX += 1
+				newX = (newX.toInt + 1).toChar // go tho the next letter
 			}
 		}
 
@@ -133,4 +142,5 @@ object Ship{
 				newY, orientation, size - 1, shipName)
 		}
 	}
+
 }

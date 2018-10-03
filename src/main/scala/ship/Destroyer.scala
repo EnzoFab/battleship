@@ -11,7 +11,7 @@ class Destroyer(positions: List[Square], shipSize: Int, shipName: String)
 }
 
 object Destroyer {
-  def apply(x: Int, y: Int, orientation: String): BattleShip = {
+  def apply(x: Char, y: Int, orientation: String): BattleShip = {
     val l = Ship.createList(x, y, orientation, 2, "Destroyer")
     new BattleShip(l, 2, "Destroyer")
   }

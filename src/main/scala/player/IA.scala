@@ -3,8 +3,8 @@ import grid.Square
 import ship.Ship
 
 class IA(level : Int = 1,
-              override val ships: List[Ship], override val shotRecord: List[Square])
-  extends Player(ships, shotRecord) {
+         override val navy: List[Ship], override val shotRecord: List[Square])
+  extends Player(navy, shotRecord) {
 
   override def shoot(square: Square): Unit = ???
 

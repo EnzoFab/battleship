@@ -10,7 +10,7 @@ class Cruiser(positions: List[Square], shipSize: Int, shipName: String)
 }
 
 object Cruiser {
-  def apply(x: Int, y: Int, orientation: String): Cruiser = {
+  def apply(x: Char, y: Int, orientation: String): Cruiser = {
     val l = Ship.createList(x, y, orientation, 3, "Cruiser")
     new Cruiser(l, 3, "Cruiser")
   }
