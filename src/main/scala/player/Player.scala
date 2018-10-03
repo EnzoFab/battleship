@@ -1,21 +1,22 @@
 package player
 
-import grid.Square
+import grid.{Shot, Square}
 import ship.Ship
 
 /**
   * abstract
   */
-abstract class Player(val navy: List[Ship], val shotRecord: List[Square]) {
+abstract class Player(val navy: List[Ship], val shotRecord: List[Shot]) {
   def shoot(square: Square)
+  def indentifiant: String
 
   /**
     * custom copy method
-     * @param ships
+     * @param navy
     * @param shotRecord
     * @return
     */
-  def myOwnCopy(ships: List[Ship] = navy, shotRecord: List[Square] = shotRecord): Player
+  def myOwnCopy(navy: List[Ship] = navy, shotRecord: List[Shot] = shotRecord): Player
 
   /**
     * Check if the ship given in parameter overlap a ship of the navy
@@ -89,5 +90,15 @@ abstract class Player(val navy: List[Ship], val shotRecord: List[Square]) {
     }
 
     gameOverInt(navy)
+  }
+
+  override def toString = {
+
+    def toStringInt(list: List[Ship]): String = {
+      if (list.isEmpty) "\n"
+      else list.toString + "\n" + toStringInt(list.tail)
+    }
+
+    toStringInt(navy)
   }
 }
