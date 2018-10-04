@@ -4,7 +4,15 @@ import grid.Grid
 import player.{HPlayer, IA, Player}
 import ship._
 
+
 object SetUp {
+
+  /**
+    * Set up the navy of a player
+    * @param player
+    * @param navySize
+    * @return
+    */
   def placeShip(player: Player, navySize: Int): Player = {
     if (navySize >= 5) player.myOwnCopy()
     else {
@@ -75,7 +83,10 @@ object SetUp {
             println("This ship can't be created it overlaps an existing one")
             placeShip(player.myOwnCopy(), navySize) // reload with the same value of the parameter
           }
-          else copyPlayer = player.myOwnCopy(navy = ship :: player.navy )
+          else {
+            copyPlayer = player.myOwnCopy(navy = ship :: player.navy )
+            Grid.displayNavy(copyPlayer.navy)
+          }
 
         }
       }

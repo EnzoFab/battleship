@@ -2,6 +2,9 @@ package grid
 
 import ship.Ship
 
+/**
+  * kinda helper class that helps to display a grid or to know whether a ship belongs to the grid or not
+  */
 object Grid {
 
   /**
@@ -24,7 +27,7 @@ object Grid {
     * @param square
     * @return
     */
-  def isInGrid(square: Square): Boolean = {
+  private def isInGrid(square: Square): Boolean = {
     val x = square.coordX.toInt
     val y = square.coordY
     x >= 65 && x <= 74 && y >= 0 && y <= 9
@@ -32,10 +35,133 @@ object Grid {
   }
 
   /**
+    * create a grid full of square
+    * @return
+    */
+  private def createGrid (): Array[Array[Square]] = {
+
+    /**
+      * fill the matrix with squares
+      * @param matrix
+      * @param i
+      * @param j
+      * @return
+      */
+    def fillMatrix(matrix: Array[Array[Square]], i: Int, j: Int): Array[Array[Square]] = {
+      if (i == 9 && j == 9){
+        val x = (i + 65).toChar
+        matrix(i)(j) = Square(x, j)
+        matrix
+      }
+      else if(j == 9){
+        val x = (i + 65).toChar
+        matrix(i)(j) = Square(x, j)
+
+        fillMatrix(matrix, i+1, 0)
+      }else{
+        val x = (i + 65).toChar
+        matrix(i)(j) = Square(x, j)
+
+        fillMatrix(matrix, i, j+1)
+      }
+    }
+    fillMatrix(Array.ofDim[Square](10, 10) , 0, 0)
+  }
+
+  /**
+    *
+    * @param grid
+    * @return
+    */
+  private def fillGridWithCustomSquare(grid: Array[Array[Square]], list: List[Square]): Array[Array[Square]] = {
+    if(list.isEmpty) grid
+    else {
+      val j =  list.head.coordY
+      val i = list.head.coordX.toInt - 65
+      grid(j)(i) = list.head
+
+      fillGridWithCustomSquare(grid, list.tail)
+    }
+  }
+
+
+  /*
+    =========================== DISPLAY METHOD =========================================================
+   */
+  /**
+    * permit to have the labels for the number coordinate in the grid
+    * @return
+    */
+  private def charLineSquares (max: Int, cpt: Int): String = {
+    if(cpt == max) " |\n"
+    else {
+      val char = (cpt + 65).toChar
+      "| " + char + " " + charLineSquares(max, cpt + 1)
+    }
+  }
+
+  /**
+    * display the grid given in parameter
+    * @param grid
+    * @return
+    */
+  private def displayGrid (grid: Array[Array[Square]]): String = {
+
+    def througGrid(grid: Array[Array[Square]], i: Int, j: Int): String = {
+      if(i == 9 && j == 9) grid(i)(j).toString + " |\n"
+      else if(j == 9){
+        grid(i)(j).toString + " |\n" + througGrid(grid, i+1, 0)
+      }else if (j == 0) {
+        "| " + i + " " + grid(i)(j).toString  + througGrid(grid, i, j+1)
+      }
+      else {
+        grid(i)(j).toString  + througGrid(grid, i, j+1)
+      }
+    }
+
+    "| - " + charLineSquares(10, 0) +  througGrid(grid, 0, 0)
+  }
+
+
+
+
+
+
+  /**
     * displays the list given in parameter in grid form
     * @param list
     */
-  def display(list: List[Square]): Unit = {
-    println()
+  private def display(list: List[Square]): String = {
+    var grid = createGrid()
+    grid = fillGridWithCustomSquare(grid, list)
+
+    displayGrid(grid)
+  }
+
+
+  private def navyToList(list: List[Ship]): List[Square] = {
+    if(list.isEmpty) Nil
+    else {
+      list.head.positions ::: navyToList(list.tail)
+    }
+  }
+
+
+  /**
+    * display a list of ships in a grid
+    * @param list
+    */
+  def displayNavy(list: List[Ship]): Unit = {
+    val l = navyToList(list)
+    println("\n" + display(l) + "\n")
+  }
+
+
+  /**
+    * display a list of shot in a grid
+    * @param list
+    */
+  def displayShotRecord(list: List[Shot]): Unit= {
+
   }
 }

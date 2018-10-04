@@ -7,11 +7,11 @@ package grid
 	* @param isTouched
 	* @param icon
 	*/
-case class Square(coordX: Char, coordY: Int, isTouched: Boolean = false, icon: String = "X") {
+case class Square(coordX: Char, coordY: Int, isTouched: Boolean = false, icon: String = "-") {
 
 	override def toString: String = {
-		if (!isTouched) "| " + icon + " |"
-		else "| X |"
+		if (!isTouched) "| " + icon + " "
+		else "| X "
 	}
 
 	/**

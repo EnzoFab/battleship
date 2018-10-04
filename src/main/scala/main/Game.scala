@@ -11,6 +11,8 @@ object Game extends App {
 
 	println("\n Welcome to the BattleShip Game\nPlease choose the game mode:\n")
 
+	// println(Grid.displayGrid())
+
 	println("1- Player vs Player\n2- Player vs IA\n3- IA vs IA")
 	val x = scala.io.StdIn.readInt
 
@@ -59,6 +61,7 @@ object Game extends App {
 
 	println(player1.indentifiant + ": ")
 	player1 = player1.myOwnCopy(navy =  SetUp.placeShip(player1, 0).navy)
+
 
 	println(player2.indentifiant + ": ")
 	player2 = player2.myOwnCopy(navy =  SetUp.placeShip(player2, 0).navy)
