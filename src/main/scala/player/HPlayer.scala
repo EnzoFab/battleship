@@ -4,16 +4,15 @@ import grid.{Shot, Square}
 import ship.Ship
 
 case class HPlayer(name: String = "No Name",
-              override val navy: List[Ship], override val shotRecord: List[Shot])
-extends Player(navy, shotRecord) {
+              override val navy: List[Ship], override val playerShotRecord: List[Shot],
+                   override val opponentShotRecord: List[Shot] )
+extends Player(navy, playerShotRecord, opponentShotRecord) {
 
-  override def indentifiant: String = name
+  override def identifier: String = name
 
-
-  override def shoot(square: Square): Unit = ???
-
-  override def myOwnCopy(ships: List[Ship], shotRecord: List[Shot]): HPlayer =
-    HPlayer(name, ships, shotRecord)
+  override def myOwnCopy(ships: List[Ship], playerShotRecord: List[Shot],
+                         opponentShotRecord: List[Shot]):
+  HPlayer = HPlayer(name, ships, playerShotRecord, opponentShotRecord)
 
 
 }
@@ -22,6 +21,6 @@ extends Player(navy, shotRecord) {
 
 object HPlayer{
   def apply(name: String, ships:
-  List[Ship] = Nil, shotRecord: List[Shot] = Nil): HPlayer
-  = new HPlayer(name, ships, shotRecord)
+  List[Ship] = Nil, shotRecord: List[Shot] = Nil, opponentShotRecord: List[Shot] = Nil): HPlayer
+  = new HPlayer(name, ships, shotRecord, opponentShotRecord)
 }

@@ -92,6 +92,23 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 		inSightInt(positions, square)
 	}
 
+	/**
+		* Return a list of square that are a copy of the current position of the boat with all the
+		* position of the ship set to touched if they are equal to the square
+		* @param square
+		* @return
+		*/
+	def updateShip(square: Square): List[Square] = {
+
+		def updateS(list: List[Square], square: Square): List[Square] = {
+			if (list.isEmpty) Nil
+			else if (list.head.equals(square))
+				list.head.copy(isTouched = true) :: updateS(list.tail, square)
+			else list.head :: updateS(list.tail, square)
+		}
+
+		updateS(positions, square)
+	}
 
   def copy(positions: List[Square] = positions, shipSize: Int = shipSize, shipName: String = shipName): Ship
 
@@ -134,10 +151,9 @@ object Ship{
 		}
 
 		if (size == 0) Nil
-		else {
-			Square(x, y, isTouched = false, shipName.charAt(0) + "") :: createList(newX,
-				newY, orientation, size - 1, shipName)
-		}
+		else
+			Square(x, y, isTouched = false, shipName.charAt(0) + "", shipName) ::
+				createList(newX, newY, orientation, size - 1, shipName)
 	}
 
 }

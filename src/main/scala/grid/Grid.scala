@@ -27,7 +27,7 @@ object Grid {
     * @param square
     * @return
     */
-  private def isInGrid(square: Square): Boolean = {
+  def isInGrid(square: Square): Boolean = {
     val x = square.coordX.toInt
     val y = square.coordY
     x >= 65 && x <= 74 && y >= 0 && y <= 9
@@ -85,6 +85,20 @@ object Grid {
   }
 
 
+  private def navyToSquareList(list: List[Ship]): List[Square] = {
+    if(list.isEmpty) Nil
+    else {
+      list.head.positions ::: navyToSquareList(list.tail)
+    }
+  }
+
+  private def shotsToListSquare(list: List[Shot]): List[Square] = {
+    if (list.isEmpty) Nil
+    else list.head.toSquare :: shotsToListSquare(list.tail)
+  }
+
+
+
   /*
     =========================== DISPLAY METHOD =========================================================
    */
@@ -124,36 +138,32 @@ object Grid {
 
 
 
-
-
-
   /**
     * displays the list given in parameter in grid form
     * @param list
+    * @param shotRecord represent the opponent shot
     */
-  private def display(list: List[Square]): String = {
+  private def display(list: List[Square], shotRecord: List[Square] = Nil): String = {
     var grid = createGrid()
+    grid = fillGridWithCustomSquare(grid, shotRecord)
     grid = fillGridWithCustomSquare(grid, list)
+
+
+
 
     displayGrid(grid)
   }
 
 
-  private def navyToList(list: List[Ship]): List[Square] = {
-    if(list.isEmpty) Nil
-    else {
-      list.head.positions ::: navyToList(list.tail)
-    }
-  }
-
 
   /**
     * display a list of ships in a grid
-    * @param list
+    * @param navy
     */
-  def displayNavy(list: List[Ship]): Unit = {
-    val l = navyToList(list)
-    println("\n" + display(l) + "\n")
+  def displayNavy(navy: List[Ship], shotRecord: List[Shot]): Unit = {
+    val l = navyToSquareList(navy)
+    val l2 = shotsToListSquare(shotRecord)
+    println("\nNavy:\n" + display(l, l2) + "\n")
   }
 
 
@@ -162,6 +172,10 @@ object Grid {
     * @param list
     */
   def displayShotRecord(list: List[Shot]): Unit= {
-
+    val l = shotsToListSquare(list)
+    println("\nShot record:\n" +
+      "    - X: Shot successful \n" +
+      "    - O: Shot failed" +
+      "\n" + display(l) + "\n")
   }
 }

@@ -1,8 +1,10 @@
 package main
 
 import grid.Grid
-import player.{HPlayer, IA, Player}
+import player.{AI, HPlayer, Player}
 import ship._
+
+import scala.util.Random
 
 
 object SetUp {
@@ -10,11 +12,11 @@ object SetUp {
   /**
     * Set up the navy of a player
     * @param player
-    * @param navySize
     * @return
     */
-  def placeShip(player: Player, navySize: Int): Player = {
-    if (navySize >= 5) player.myOwnCopy()
+  def placeShip(player: Player,  random: Random): Player = {
+    println(player.navy.size)
+    if (player.navy.size >= 5) player.myOwnCopy()
     else {
       var ship: Ship = null
       var x: Char = '/'
@@ -23,18 +25,23 @@ object SetUp {
       var copyPlayer: Player = player
 
       player match {
-        case IA(_, _, _) => { // create random value for the ship
-          //TODO finir
+        case p: AI => { // create random value for the ship
+          val arrayInt = (0 to 9).toArray
+          val arrayChar = ('A' to 'J').toArray
+
+
+          x = arrayChar(random.nextInt(10))
+          y = arrayInt(random.nextInt(10))
+
+          orientation = AI.randomAIOrientation(x, y, random)
+
         }
-        case HPlayer(_, _, _) => {
-          if(navySize == 0) println("\n1- BattleShip positionning (size 4)")
-          else if(navySize == 1) println("\n2- Carrier positionning (size 5)")
-          else if(navySize == 2) println("\n3- Cruiser positionning (size 3)")
-          else if(navySize == 3) println("\n4- Destroyer positionning (size 2)")
-          else if(navySize == 4) println("\n5- SubMarine positionning (size 3)")
-
-
-
+        case p: HPlayer => {
+          if(player.navy.size == 0) println("\n1- BattleShip positionning (size 4)")
+          else if(player.navy.size == 1) println("\n2- Carrier positionning (size 5)")
+          else if(player.navy.size == 2) println("\n3- Cruiser positionning (size 3)")
+          else if(player.navy.size == 3) println("\n4- Destroyer positionning (size 2)")
+          else if(player.navy.size == 4) println("\n5- SubMarine positionning (size 3)")
 
           println("Please choose the column of your ship (a letter is expected): ")
           x = scala.io.StdIn.readChar
@@ -50,48 +57,46 @@ object SetUp {
             && orientation.toLowerCase != "left" && orientation.toLowerCase != "l"
             && orientation.toLowerCase != "right" && orientation.toLowerCase != "r") {
             println("Sorry we can't handle this type of orientation retry please\n")
-            placeShip(player, navySize) // reload with the same value of the parameter
+            placeShip(player, random) // reload with the same value of the parameter
           }
         }
         case _ => copyPlayer = player.myOwnCopy()
 
       }
 
-      if(navySize == 0) ship = BattleShip(x, y, orientation)
-      else if(navySize == 1) ship = Carrier(x, y, orientation)
-      else if(navySize == 2) ship = Cruiser(x, y, orientation)
-      else if(navySize == 3) ship = Destroyer(x, y, orientation)
-      else if(navySize == 4) ship = SubMarine(x, y, orientation)
+      if(player.navy.size == 0) ship = BattleShip(x, y, orientation)
+      else if(player.navy.size == 1) ship = Carrier(x, y, orientation)
+      else if(player.navy.size == 2) ship = Cruiser(x, y, orientation)
+      else if(player.navy.size == 3) ship = Destroyer(x, y, orientation)
+      else if(player.navy.size == 4) ship = SubMarine(x, y, orientation)
 
       // recursive call
       player match {
-        case IA(_, _, _) => {
-
-          if (!Grid.isConform(ship) || player.overLaps(ship)){
-            placeShip(player.myOwnCopy(), navySize) // reload with the same value of the parameter
+        case p: AI => {
+          if (!Grid.isConform(ship) || p.overLaps(ship)){
+            placeShip(player.myOwnCopy(), random) // reload with the same value of the parameter
           }
           else copyPlayer = player.myOwnCopy(navy = ship :: player.navy )
-
         }
-        case HPlayer(_, _, _) => {
+        case p: HPlayer => {
 
           if (!Grid.isConform(ship)) {
             println("Sorry This ship doesn't fit the grid (column A - J and row 0 - 9)")
-            placeShip(player.myOwnCopy(), navySize) // reload with the same value of the parameter
+            placeShip(player.myOwnCopy(), random) // reload with the same value of the parameter
           }
           else if (player.overLaps(ship)) {
             println("This ship can't be created it overlaps an existing one")
-            placeShip(player.myOwnCopy(), navySize) // reload with the same value of the parameter
+            placeShip(player.myOwnCopy(), random) // reload with the same value of the parameter
           }
           else {
             copyPlayer = player.myOwnCopy(navy = ship :: player.navy )
-            Grid.displayNavy(copyPlayer.navy)
+            Grid.displayNavy(copyPlayer.navy, copyPlayer.opponentShotRecord)
           }
 
         }
       }
 
-      placeShip(copyPlayer, navySize + 1)
+      placeShip(copyPlayer, random)
 
     }
   }

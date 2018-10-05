@@ -6,17 +6,18 @@ import ship.Ship
 /**
   * abstract
   */
-abstract class Player(val navy: List[Ship], val shotRecord: List[Shot]) {
-  def shoot(square: Square)
-  def indentifiant: String
+abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot], val opponentShotRecord: List[Shot]) {
+  def identifier: String
 
   /**
     * custom copy method
      * @param navy
-    * @param shotRecord
+    * @param playerShotRecord
     * @return
     */
-  def myOwnCopy(navy: List[Ship] = navy, shotRecord: List[Shot] = shotRecord): Player
+  def myOwnCopy(navy: List[Ship] = navy,
+                playerShotRecord: List[Shot] = playerShotRecord,
+                opponentShotRecord: List[Shot] = opponentShotRecord): Player
 
   /**
     * Check if the ship given in parameter overlap a ship of the navy
@@ -74,6 +75,21 @@ abstract class Player(val navy: List[Ship], val shotRecord: List[Shot]) {
     }
 
     inSightInt(navy, square)
+  }
+
+  /**
+    * Update all the navy of the player
+    * @param square
+    * @return
+    */
+  def updateTouchedShip (square: Square): List[Ship]= {
+
+    def int (list: List[Ship], square: Square): List[Ship]=  {
+      if(list.isEmpty) Nil
+      else list.head.copy(positions = list.head.updateShip(square)) :: int(list.tail, square)
+    }
+
+    int(navy, square)
   }
 
   /**
