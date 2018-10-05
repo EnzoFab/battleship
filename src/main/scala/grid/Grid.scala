@@ -35,6 +35,25 @@ object Grid {
   }
 
   /**
+    * create a grid in list form
+    * @param coordX
+    * @param coordY
+    * @param maxX
+    * @param maxY
+    * @return
+    */
+  def createGridInList(coordX: Char, coordY: Int, maxX: Char, maxY: Int):  List[Square] = {
+    if(coordX == maxX && coordY == maxY) Nil
+    else if (coordY == maxY) {
+      val newX = (coordX.toInt + 1).toChar // increment the letter coord
+      Square(coordX, coordY) ::  createGridInList(newX, 0, maxX, maxY)
+    }else {
+      Square(coordX, coordY) ::  createGridInList(coordX, coordY + 1, maxX, maxY)
+    }
+  }
+
+
+  /**
     * create a grid full of square
     * @return
     */
@@ -67,6 +86,7 @@ object Grid {
     }
     fillMatrix(Array.ofDim[Square](10, 10) , 0, 0)
   }
+
 
   /**
     *

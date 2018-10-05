@@ -56,7 +56,7 @@ object GameLoop {
           }
         }
         case p: AI => {
-         square = p.computeTarget(random)
+         square = p.computeTarget(random, p.level, p.playerShotRecord)
           println(s"${currentPlayer.identifier} target position: (${square.coordX}, ${square.coordY})\n")
         }
 

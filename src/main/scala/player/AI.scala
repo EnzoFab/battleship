@@ -1,5 +1,5 @@
 package player
-import grid.{Shot, Square}
+import grid.{Grid, Shot, Square}
 import ship.Ship
 
 import scala.annotation.tailrec
@@ -16,12 +16,17 @@ case class AI(level : Int = 1,
                          opponentShotRecord: List[Shot]): AI
   = AI(level, ships, playerShotRecord, opponentShotRecord)
 
-
-  def computeTarget(random: Random): Square = {
-    level match {
+  /**
+    * To choose a square to target according to the level of the AI
+    * @param random
+    * @param aiLevel
+    * @return
+    */
+  def computeTarget(random: Random, aiLevel: Int, playerShotRecord: List[Shot]): Square = {
+    aiLevel match {
       case 1 => level1(random)
       case 2 => level2(random)
-      case 3 => level3(random)
+      case 3 => level3(random, playerShotRecord)
     }
   }
 
@@ -47,7 +52,7 @@ case class AI(level : Int = 1,
     * @return
     */
   private def level2(random: Random): Square = {
-    val arrayInt = (0 to 9).toArray
+    /* val arrayInt = (0 to 9).toArray
     val arrayChar = ('A' to 'J').toArray
 
     val x = arrayChar(random.nextInt(10))
@@ -56,7 +61,10 @@ case class AI(level : Int = 1,
 
     if (placeTouched(s, playerShotRecord))
       level2(random)
-    else s
+    else s */
+
+    val l = possibleShot(Grid.createGridInList('A', 0, 'J', 9), playerShotRecord).toArray
+    l(random.nextInt(l.length)) // choose randomly in the possible shot
   }
 
   /**
@@ -66,33 +74,54 @@ case class AI(level : Int = 1,
     * @param random
     * @return
     */
-  private def level3(random: Random): Square = {
+  private def level3(random: Random, shotRecord: List[Shot]): Square = {
+    if (fourPreviousShotHasSucceeded(shotRecord).isDefined){
+      // create 4 square arround and check if they are possible shot and are in the grid
+      Square('A', 2) // TODO
+    }
     Square('A', 2) // TODO
   }
 
   /**
-    * allows to know if the IA has successed its four previous shot or at List on target
+    * allows to know if the IA has succeeded its four previous shot or at List on target
     * @return
     */
-  private def fourPreviousShot(playerShotRecord: List[Shot]): Boolean = {
+  private def fourPreviousShotHasSucceeded(playerShotRecord: List[Shot]): Option[Square] = {
     // TODO use option instead
     @tailrec
-    def fourPreviousShotInt(list: List[Shot], number: Int): Boolean = {
-      if(list.isEmpty) true
-      else if(number >= 4) {
-        list.head.hasTouch || list.head.isNear // has touch or is near
-      }else {
-        (list.head.hasTouch || list.head.isNear) && fourPreviousShotInt(list.tail, number + 1)
-      }
+    def fourPreviousShotInt(list: List[Shot], number: Int): Option[Square] = {
+      if(list.isEmpty || number > 4) None
+      else  if ( list.head.hasTouch || list.head.isNear) Some(list.head.toSquare)
+      else fourPreviousShotInt(list.tail, number + 1)
     }
 
     fourPreviousShotInt(playerShotRecord, 0)
+  }
+
+  private def twoPreviousShotHasSucceded(playerShotRecord: List[Shot]): Boolean = {
+
   }
 
   private def placeTouched(square: Square, shotList: List[Shot]): Boolean = {
     if (shotList.isEmpty) false
     else {
       shotList.head.toSquare.equals(square) || placeTouched(square, shotList.tail)
+    }
+  }
+
+
+  /**
+    * according to the shotRecord return all the square that weren't targeted yet
+    * @param grid
+    * @param shotRecord
+    * @return
+    */
+  private def possibleShot (grid: List[Square], shotRecord: List[Shot]): List[Square] = {
+    if(grid.isEmpty) Nil
+    else if (!placeTouched(grid.head, shotRecord)) {
+      grid.head :: possibleShot(grid.tail, shotRecord)
+    }else {
+      possibleShot(grid.tail, shotRecord)
     }
   }
 }
