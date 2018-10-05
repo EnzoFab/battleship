@@ -7,14 +7,14 @@ import scala.util.Random
 
 case class AI(level : Int = 1,
               override val navy: List[Ship], override val playerShotRecord: List[Shot],
-              override val opponentShotRecord: List[Shot])
-  extends Player(navy, playerShotRecord, opponentShotRecord) {
+              override val opponentShotRecord: List[Shot], override val playerScore: Int)
+  extends Player(navy, playerShotRecord, opponentShotRecord, playerScore) {
 
   override def identifier: String = s"IA level $level"
 
   override def myOwnCopy(ships: List[Ship], playerShotRecord: List[Shot],
-                         opponentShotRecord: List[Shot]): AI
-  = AI(level, ships, playerShotRecord, opponentShotRecord)
+                         opponentShotRecord: List[Shot], playerScore: Int): AI
+  = AI(level, ships, playerShotRecord, opponentShotRecord, playerScore)
 
   /**
     * To choose a square to target according to the level of the AI
@@ -76,10 +76,23 @@ case class AI(level : Int = 1,
     */
   private def level3(random: Random, shotRecord: List[Shot]): Square = {
     if (fourPreviousShotHasSucceeded(shotRecord).isDefined){
+
       // create 4 square arround and check if they are possible shot and are in the grid
-      Square('A', 2) // TODO
+      val sq = fourPreviousShotHasSucceeded(shotRecord).get
+      var sq1 = sq.copy(coordY = sq.coordY + 1)
+      var sq2 = sq.copy(coordY = sq.coordY - 1)
+      var sq3 = sq.copy(coordX = (sq.coordX.toInt + 1).toChar)
+      var sq4 = sq.copy(coordX = (sq.coordX.toInt - 1).toChar)
+
+      if (Grid.isInGrid(sq1) && !placeTouched(sq1, shotRecord)) sq1
+      else if (Grid.isInGrid(sq2) && !placeTouched(sq2, shotRecord)) sq2
+      else if (Grid.isInGrid(sq3) && !placeTouched(sq3, shotRecord)) sq3
+      else if (Grid.isInGrid(sq4) && !placeTouched(sq4, shotRecord)) sq4
+      else level2(random) // shot on a random no used position
+
+      // if the position is in grid and AI hasn't use this place yet
     }
-    Square('A', 2) // TODO
+    else level2(random) // shot on a random no used position
   }
 
   /**
@@ -98,8 +111,9 @@ case class AI(level : Int = 1,
     fourPreviousShotInt(playerShotRecord, 0)
   }
 
-  private def twoPreviousShotHasSucceded(playerShotRecord: List[Shot]): Boolean = {
-
+  private def twoPreviousShotHasSucceded(playerShotRecord: List[Shot]): Option[Square] = {
+    // TODO
+    None
   }
 
   private def placeTouched(square: Square, shotList: List[Shot]): Boolean = {
@@ -129,8 +143,9 @@ case class AI(level : Int = 1,
 
 object AI {
   def apply(level: Int, ships:
-  List[Ship] = Nil, playerShotRecord: List[Shot] = Nil, opponentShotRecord: List[Shot] = Nil): AI
-  = new AI(level, ships, playerShotRecord, opponentShotRecord)
+  List[Ship] = Nil, playerShotRecord: List[Shot] = Nil,
+            opponentShotRecord: List[Shot] = Nil, playerScore: Int = 0): AI
+  = new AI(level, ships, playerShotRecord, opponentShotRecord, playerScore)
 
 
   /**

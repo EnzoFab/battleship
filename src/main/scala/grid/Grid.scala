@@ -127,7 +127,7 @@ object Grid {
     * @return
     */
   private def charLineSquares (max: Int, cpt: Int): String = {
-    if(cpt == max) " |\n"
+    if(cpt == max) " |"
     else {
       val char = (cpt + 65).toChar
       "| " + char + " " + charLineSquares(max, cpt + 1)
@@ -142,18 +142,20 @@ object Grid {
   private def displayGrid (grid: Array[Array[Square]]): String = {
 
     def througGrid(grid: Array[Array[Square]], i: Int, j: Int): String = {
-      if(i == 9 && j == 9) grid(i)(j).toString + " |\n"
+      if(i == 9 && j == 9) grid(i)(j).toString + " |"+ Console.RESET + "\n"
       else if(j == 9){
         grid(i)(j).toString + " |\n" + througGrid(grid, i+1, 0)
       }else if (j == 0) {
-        "| " + i + " " + grid(i)(j).toString  + througGrid(grid, i, j+1)
+        "| " + Console.CYAN + i + Console.RESET +" " +
+          grid(i)(j).toString  + througGrid(grid, i, j+1)
+        // add the number at the beginning of the row
       }
       else {
-        grid(i)(j).toString  + througGrid(grid, i, j+1)
+        Console.CYAN_B + grid(i)(j).toString  + througGrid(grid, i, j+1)
       }
     }
-
-    "| - " + charLineSquares(10, 0) +  througGrid(grid, 0, 0)
+    Console.BOLD + Console.CYAN_B + "| - " + charLineSquares(10, 0) + Console.RESET +
+      "\n" + througGrid(grid, 0, 0)
   }
 
 

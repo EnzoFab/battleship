@@ -8,10 +8,12 @@ import scala.util.Random
 
 object Game extends App {
 
+	print(s"${Console.RED}Salut ${Console.RESET}")
 	var player1: Player = _ // equivalent to null
 	var player2: Player = _
 
-	println("\n Welcome to the BattleShip Game\nPlease choose the game mode:\n")
+	println(s"\n${Console.BOLD}Welcome to the BattleShip Game\nPlease choose the game mode:" +
+		s"${Console.RESET}\n")
 
 	// println(Grid.displayGrid())
 
@@ -60,19 +62,25 @@ object Game extends App {
 		}
 	}
 
-  println("Game Start:\n\n")
-	println(player1.identifier + ": ")
-	player1 = player1.myOwnCopy(navy =  SetUp.placeShip(player1, Random).navy)
+	var gameState = GameState(player1, player2)
 
-	println(player2.identifier + ": ")
-	player2 = player2.myOwnCopy(navy =  SetUp.placeShip(player2, Random).navy)
+	println("Game Start:\n\n")
+	println(gameState.player1.identifier + ": ")
 
+	val copyPlayer1 = player1.myOwnCopy(navy =  SetUp.placeShip(gameState.player1, Random).navy)
 
-  Grid.displayNavy(player1.navy, player1.playerShotRecord)
+	println(gameState.player2.identifier + ": ")
+	val copyPlayer2 = player2.myOwnCopy(navy =  SetUp.placeShip(gameState.player2, Random).navy)
+
+	gameState = gameState.copy(player1 = copyPlayer1, player2 = copyPlayer2)
+
+	// display the grid
+  Grid.displayNavy(gameState.player1.navy, gameState.player1.playerShotRecord)
 
   Grid.displayNavy(player2.navy, player2.playerShotRecord)
 
-  GameLoop.mainLoop(player1, player2, random)
+  gameState = GameLoop.battleLoop(gameState.player1, gameState.player2, random)
+
 
 
 

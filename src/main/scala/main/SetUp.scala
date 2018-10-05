@@ -15,7 +15,6 @@ object SetUp {
     * @return
     */
   def placeShip(player: Player,  random: Random): Player = {
-    println(player.navy.size)
     if (player.navy.size >= 5) player.myOwnCopy()
     else {
       var ship: Ship = null

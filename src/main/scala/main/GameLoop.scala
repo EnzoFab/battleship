@@ -13,9 +13,15 @@ object GameLoop {
     * @param currentPlayer
     * @param opponent
     */
-  def mainLoop(currentPlayer: Player, opponent: Player, random: Random): Unit = {
-    if (currentPlayer.gameOver) println(opponent.identifier + " has won\n Game is over !")
-    else if (opponent.gameOver) println(currentPlayer.identifier + " has won\n Game is over !")
+  def battleLoop(currentPlayer: Player, opponent: Player, random: Random): GameState = {
+    if (currentPlayer.gameOver) {
+      println(opponent.identifier + " has won\n Game is over !")
+      GameState(
+        opponent,
+        currentPlayer.myOwnCopy(playerScore = currentPlayer.playerScore + 1)
+      )
+      // the loser of this game will begin the next game
+    }
     else {
       var x: Char = ' '
       var y: Int = 0
@@ -34,14 +40,14 @@ object GameLoop {
             Grid.displayShotRecord(currentPlayer.playerShotRecord)
             // display the currentplayer grid and reload the game in the same state
 
-            mainLoop(currentPlayer, opponent, random)
+            battleLoop(currentPlayer, opponent, random)
           }else if (x == 'Q'){
             println("\nQuit !")
             Grid.displayNavy(currentPlayer.navy, currentPlayer.opponentShotRecord)
             println("\n\n")
             Grid.displayNavy(opponent.navy, opponent.opponentShotRecord)
 
-            return
+            GameState(opponent.myOwnCopy(), currentPlayer.myOwnCopy())
           }
           // special command to display of leave the game
 
@@ -52,7 +58,7 @@ object GameLoop {
 
           if (!Grid.isInGrid(square)) {
             println("Sorry these coordinates aren't in the grid !")
-            mainLoop(currentPlayer, opponent, random)
+            battleLoop(currentPlayer, opponent, random)
           }
         }
         case p: AI => {
@@ -91,7 +97,7 @@ object GameLoop {
         navy = opponentNavy,
         opponentShotRecord = shot::opponent.opponentShotRecord)
 
-      mainLoop(enemy, current, random) // it's opponent turn
+      battleLoop(enemy, current, random) // it's opponent turn
     }
 
   }

@@ -6,7 +6,8 @@ import ship.Ship
 /**
   * abstract
   */
-abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot], val opponentShotRecord: List[Shot]) {
+abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
+                      val opponentShotRecord: List[Shot], val playerScore: Int = 0) {
   def identifier: String
 
   /**
@@ -17,7 +18,8 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot], va
     */
   def myOwnCopy(navy: List[Ship] = navy,
                 playerShotRecord: List[Shot] = playerShotRecord,
-                opponentShotRecord: List[Shot] = opponentShotRecord): Player
+                opponentShotRecord: List[Shot] = opponentShotRecord,
+                playerScore: Int = playerScore): Player
 
   /**
     * Check if the ship given in parameter overlap a ship of the navy

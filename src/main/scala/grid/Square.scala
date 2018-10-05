@@ -1,5 +1,6 @@
 package grid
 
+
 import ship.Ship
 
 /**
@@ -12,7 +13,11 @@ import ship.Ship
 case class Square(coordX: Char, coordY: Int, isTouched: Boolean = false, icon: String = "-",
 									var associatedShipName: String = "None") {
 
-	override def toString: String = "| " + icon + " "
+	override def toString: String = {
+		if(isTouched) "|" + Console.RED_B +  " X " + Console.RESET
+		else if (icon == "-") Console.CYAN_B + "| " + icon + " " + Console.RESET
+		else "|" + Console.MAGENTA_B + " " + icon + " " + Console.RESET
+	}
 
 
 
