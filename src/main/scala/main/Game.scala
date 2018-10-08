@@ -1,6 +1,7 @@
 package main
 
 import grid.{Grid, Square}
+import main.Game.{gameState, random}
 import player.{AI, HPlayer, Player}
 import ship._
 
@@ -8,7 +9,34 @@ import scala.util.Random
 
 object Game extends App {
 
-	print(s"${Console.RED}Salut ${Console.RESET}")
+
+  def gameLoop (gs: GameState, random: Random): GameState = {
+    println(s"${Console.BLINK}Game Start:${Console.RESET}\n\n")
+    println(gs.player1.identifier + ": ")
+
+    val copyPlayer1 = player1.myOwnCopy(navy =  SetUp.placeShip(gs.player1, Random).navy)
+    // create a copy of the player with his navy
+
+    println(gs.player2.identifier + ": ")
+    val copyPlayer2 = player2.myOwnCopy(navy =  SetUp.placeShip(gs.player2, Random).navy)
+
+    var gameState = gs.copy(player1 = copyPlayer1, player2 = copyPlayer2)
+
+    // display the grid
+    /*Grid.displayNavy(gameState.player1.navy, gameState.player1.playerShotRecord)
+
+    Grid.displayNavy(player2.navy, player2.playerShotRecord)*/
+
+    gameState = GameLoop.battleLoop(gameState.player1, gameState.player2, random)
+    println("Play again ?\n1- Yes\n2- No")
+    val playAgain = readInt
+    if(playAgain == 1)
+      gameLoop(gameState, random)
+    else
+      gameState
+
+  }
+
 	var player1: Player = _ // equivalent to null
 	var player2: Player = _
 
@@ -64,22 +92,8 @@ object Game extends App {
 
 	var gameState = GameState(player1, player2)
 
-	println("Game Start:\n\n")
-	println(gameState.player1.identifier + ": ")
 
-	val copyPlayer1 = player1.myOwnCopy(navy =  SetUp.placeShip(gameState.player1, Random).navy)
-
-	println(gameState.player2.identifier + ": ")
-	val copyPlayer2 = player2.myOwnCopy(navy =  SetUp.placeShip(gameState.player2, Random).navy)
-
-	gameState = gameState.copy(player1 = copyPlayer1, player2 = copyPlayer2)
-
-	// display the grid
-  Grid.displayNavy(gameState.player1.navy, gameState.player1.playerShotRecord)
-
-  Grid.displayNavy(player2.navy, player2.playerShotRecord)
-
-  gameState = GameLoop.battleLoop(gameState.player1, gameState.player2, random)
+  gameState = gameLoop(gameState, random)
 
 
 
@@ -95,7 +109,7 @@ object Game extends App {
 	println("overLaps :" + b.overLaps(b2)) */
 
 
-	println("\n\nEnd game !")
+	println(s"\n${gameState}\nEnd game !")
 
 
 

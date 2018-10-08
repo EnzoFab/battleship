@@ -80,9 +80,11 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
   }
 
   /**
-    * Update all the navy of the player
+    * Update all the navy of the player.
+    * If a ship of the navy contains a square equals to the square given in parameter
+    * and if the square isn't touched yet then set this square to touched
     * @param square
-    * @return
+    * @return a new navy with all the Ship updated
     */
   def updateTouchedShip (square: Square): List[Ship]= {
 
@@ -110,13 +112,5 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
     gameOverInt(navy)
   }
 
-  override def toString = {
-
-    def toStringInt(list: List[Ship]): String = {
-      if (list.isEmpty) "\n"
-      else list.toString + "\n" + toStringInt(list.tail)
-    }
-
-    toStringInt(navy)
-  }
+  override def toString: String = identifier + ": " + playerScore
 }
