@@ -8,5 +8,5 @@ import player.Player
   * @param player2
   */
 case class GameState(player1: Player, player2: Player){
-  override def toString = player1.toString + " ; " + player2.toString
+  override def toString: String = player1.toString + "; " + player2.toString
 }

@@ -33,7 +33,7 @@ case class Square(coordX: Char, coordY: Int, isTouched: Boolean = false, icon: S
 	/**
 		* Two squares are close if the are one square away
 		* square.x == x and square.y = y +- 1 or square.y == y and square.x = x +- 1
-		* @param square
+		* @param square: A square
 		* @return
 		*/
 	def isClosed(square: Square): Boolean = (square.coordX == coordX && square.coordY  == coordY + 1) ||

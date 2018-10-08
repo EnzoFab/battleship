@@ -43,7 +43,7 @@ object Grid {
     * @return
     */
   def createGridInList(coordX: Char, coordY: Int, maxX: Char, maxY: Int):  List[Square] = {
-    if(coordX == maxX && coordY == maxY) Nil
+    if(coordX == maxX && coordY == maxY) Square(coordX, coordY) :: Nil
     else if (coordY == maxY) {
       val newX = (coordX.toInt + 1).toChar // increment the letter coord
       Square(coordX, coordY) ::  createGridInList(newX, 0, maxX, maxY)

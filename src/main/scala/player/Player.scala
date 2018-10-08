@@ -69,7 +69,7 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
 
     def inSightInt(ships: List[Ship], square: Square): Boolean = {
       if (ships.isEmpty) false
-      else if(!ships.head.isSinked & ships.head.inSight(square)){
+      else if(!ships.head.isSunk & ships.head.inSight(square)){
         // if the ship is sinked yet and is in Sight
         true
       }
@@ -105,12 +105,21 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
     def gameOverInt(list: List[Ship]): Boolean = {
       if(list.isEmpty) true
       else {
-        list.head.isSinked && gameOverInt(list.tail)
+        list.head.isSunk && gameOverInt(list.tail)
       }
     }
 
     gameOverInt(navy)
   }
+
+  /**
+    * return a new player with the same name and score
+    * but with the navy, shot record and opponent record set to Nil
+    * @return a new player
+    */
+  def resetGame: Player = myOwnCopy(navy = Nil, playerShotRecord = Nil, opponentShotRecord = Nil)
+
+
 
   override def toString: String = identifier + ": " + playerScore
 }

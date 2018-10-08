@@ -10,9 +10,9 @@ extends Player(navy, playerShotRecord, opponentShotRecord, playerScore) {
 
   override def identifier: String = name
 
-  override def myOwnCopy(ships: List[Ship], playerShotRecord: List[Shot],
+  override def myOwnCopy(navy: List[Ship], playerShotRecord: List[Shot],
                          opponentShotRecord: List[Shot], playerScore: Int):
-  HPlayer = HPlayer(name, ships, playerShotRecord, opponentShotRecord, playerScore)
+  HPlayer = HPlayer(name, navy, playerShotRecord, opponentShotRecord, playerScore)
 
 
 }

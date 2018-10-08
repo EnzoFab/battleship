@@ -15,10 +15,10 @@ object GameLoop {
     */
   def battleLoop(currentPlayer: Player, opponent: Player, random: Random): GameState = {
     if (currentPlayer.gameOver) {
-      println(opponent.identifier + " has won\n Game is over !")
+      println(opponent.identifier + " has destroyed " + currentPlayer.identifier + "'s navy")
       GameState(
-        opponent,
-        currentPlayer.myOwnCopy(playerScore = currentPlayer.playerScore + 1)
+        currentPlayer,
+        opponent.myOwnCopy(playerScore = opponent.playerScore + 1)
       )
       // the loser of this game will begin the next game
     }
@@ -83,11 +83,11 @@ object GameLoop {
       } else if (opponent.inSight(square)) {
         println("A ship is close\n")
 
-        shot = Shot(square.coordX, square.coordY, hasTouch = false, isNear = true)
+        shot = Shot(square.coordX, square.coordY, isNear = true)
 
       }else {
         println("Right in the ocean...\n")
-        shot = Shot(square.coordX, square.coordY, hasTouch = false)
+        shot = Shot(square.coordX, square.coordY)
       }
 
       val current = currentPlayer.myOwnCopy(playerShotRecord = shot::currentPlayer.playerShotRecord)
