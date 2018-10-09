@@ -4,16 +4,23 @@ import grid.{Shot, Square}
 import ship.Ship
 
 /**
-  * abstract
+  *
+  * @param navy: List of ship
+  * @param playerShotRecord: List of shot made by the player
+  * @param opponentShotRecord: List of shot made by the opponent
+  * @param playerScore: Number of game won by the player
   */
 abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
                       val opponentShotRecord: List[Shot], val playerScore: Int = 0) {
   def identifier: String
 
   /**
-    * custom copy method
-     * @param navy
-    * @param playerShotRecord
+    * custom copy method.
+    * Player isn't a case class so this method is used to create new Player starting form existing one
+    * @param navy: List of ship
+    * @param playerShotRecord: List of Shot made by the player
+    * @param opponentShotRecord: List of shot made by the opponent
+    * @param playerScore: Score the plauer
     * @return
     */
   def myOwnCopy(navy: List[Ship] = navy,
@@ -83,7 +90,7 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
     * Update all the navy of the player.
     * If a ship of the navy contains a square equals to the square given in parameter
     * and if the square isn't touched yet then set this square to touched
-    * @param square
+    * @param square: A square
     * @return a new navy with all the Ship updated
     */
   def updateTouchedShip (square: Square): List[Ship]= {

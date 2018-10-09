@@ -102,9 +102,12 @@ object Game extends App {
     }
 
     var gameState = GameState(player1, player2)
+    // to keep a track of the result
 
 
+    // the players didn't want to play again
     gameState = play(gameState, random)
+
     println(s"\n$gameState\nEnd game !")
 
 
@@ -115,8 +118,10 @@ object Game extends App {
     csvText += AI.testAI(AI(1), AI(3), 100, random).toString + "\n"
     csvText += AI.testAI(AI(2), AI(3), 100, random).toString
 
-    if (FileSaver.saveCSV("ai_proof", csvText).isDefined) Console.println(s"\n${Console.BOLD}File saved${Console.RESET}")
-    else Console.println("An error has occured coudn't save the file")
+    if (FileSaver.saveCSV("ai_proof", csvText).isDefined) // try to save the csv file
+      println(s"\n${Console.BOLD}File saved${Console.RESET}")
+    else
+      println("An error has occured coudn't save the file")
 
   }
 

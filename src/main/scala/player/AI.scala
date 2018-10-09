@@ -19,8 +19,8 @@ case class AI(level : Int = 1,
 
   /**
     * To choose a square to target according to the level of the AI
-    * @param random
-    * @param aiLevel
+    * @param random: random Object
+    * @param aiLevel: Level of the AI
     * @return
     */
   def computeTarget(random: Random, aiLevel: Int, playerShotRecord: List[Shot]): Square = {
@@ -34,7 +34,7 @@ case class AI(level : Int = 1,
 
   /**
     * Shot in random place and can hit several time on the same place
-    * @param random
+    * @param random: Random object
     * @return
     */
   private def level1(random: Random): Square = {
@@ -50,21 +50,10 @@ case class AI(level : Int = 1,
   /**
     * Hit on random place but doesn't hit twice the same position.
     * However
-    * @param random
+    * @param random: Random object
     * @return
     */
   private def level2(random: Random, playerShotRecord: List[Shot]): Square = {
-    /* val arrayInt = (0 to 9).toArray
-    val arrayChar = ('A' to 'J').toArray
-
-    val x = arrayChar(random.nextInt(10))
-    val y = arrayInt(random.nextInt(10))
-    val s = Square(x, y)
-
-    if (placeTouched(s, playerShotRecord))
-      level2(random)
-    else s */
-
     val l = possibleShot(Grid.createGridInList('A', 0, 'J', 9), playerShotRecord).toArray
     l(random.nextInt(l.length)) // choose randomly in the possible shot
   }
@@ -73,7 +62,7 @@ case class AI(level : Int = 1,
     * Hit randomly if there isn't a success or close shot in the four previous one
     * overwise hit around
     * if two of the previous shot have successded hit on the same row or column
-    * @param random
+    * @param random: Random object
     * @return
     */
   private def level3(random: Random, shotRecord: List[Shot]): Square = {
@@ -115,16 +104,6 @@ case class AI(level : Int = 1,
     fourPreviousShotInt(playerShotRecord, 0, None)
   }
 
-  /*
-    * return two previous shit if they are successful
-    * @param playerShotRecord
-    * @return an option
-    */
-  /*private def twoPreviousShotHasSucceded(playerShotRecord: List[Shot]): Option[List[Shot]] = {
-    if (playerShotRecord.size < 2) None
-    else if (!playerShotRecord(0).hasTouch || !playerShotRecord(1).hasTouch) None
-    else Some(List(playerShotRecord.head, playerShotRecord.tail.head))
-  }*/
 
   private def placeTouched(square: Square, shotList: List[Shot]): Boolean = {
     if (shotList.isEmpty) false

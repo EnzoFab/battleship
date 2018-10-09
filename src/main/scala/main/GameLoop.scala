@@ -10,8 +10,8 @@ object GameLoop {
   /**
     * main loop of the game
     * the currentPlayer is playing and tries to shoot his opponent navy
-    * @param currentPlayer
-    * @param opponent
+    * @param currentPlayer: the player that is actually playing (can be HPlayer of AI)
+    * @param opponent: The player that will play next turn (can be HPlayer of AI)
     */
   def battleLoop(currentPlayer: Player, opponent: Player, random: Random): GameState = {
     if (currentPlayer.gameOver) {
@@ -58,10 +58,9 @@ object GameLoop {
           }
           print("\033[H\033[2J")
         }
-        case p: AI => {
-         square = p.computeTarget(random, p.level, p.playerShotRecord)
+        case p: AI =>
+          square = p.computeTarget(random, p.level, p.playerShotRecord)
           println(s"${currentPlayer.identifier} target position: (${square.coordX}, ${square.coordY})\n")
-        }
 
       }
 
@@ -77,17 +76,19 @@ object GameLoop {
 
         shot = Shot(square.coordX, square.coordY, hasTouch = true, shipName = attackResult.get.associatedShipName)
 
+
       } else if (opponent.inSight(square)) {
         println("A ship is close\n")
 
         shot = Shot(square.coordX, square.coordY, isNear = true)
 
-      }else {
+      }else { // didn't hit anything
         println("Right in the ocean...\n")
         shot = Shot(square.coordX, square.coordY)
       }
 
       val current = currentPlayer.myOwnCopy(playerShotRecord = shot::currentPlayer.playerShotRecord)
+        // add the shot to the shot record
 
       // create a copy of the enemy by changing his navy and it's opponentShotRecord
       val enemy = opponent.myOwnCopy(

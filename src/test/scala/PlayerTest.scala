@@ -48,5 +48,32 @@ class PlayerTest extends FunSuite{
     assert(player.inSight(square) && player.inSight(square2) && !player.inSight(square3))
   }
 
+  test("GameOver is correctly set") {
+    val ship = Destroyer('A', 0,"R")
+    val sinkedShip = ship.copy(positions = List(Square('A', 0, isTouched = true), Square('B', 0, isTouched = true)))
+      // sink the ship
+
+    var player = HPlayer("name")
+    player =   player.myOwnCopy(navy = List(ship))
+
+    var player2 = HPlayer("name")
+    player2 =   player2.myOwnCopy(navy = List(sinkedShip))
+
+    assert(!player.gameOver && player2.gameOver)
+
+
+  }
+
+  test("updateTouchedShip is correctly set") {
+    val ship = Destroyer('A', 0,"R")
+    val sinkedShip = ship.copy(positions = List(Square('A', 0)))
+      // create a ship only one square for the example
+    var player = HPlayer("name")
+    player =   player.myOwnCopy(navy = List(sinkedShip))
+
+    val player2 = player.myOwnCopy(navy = player.updateTouchedShip(Square('A', 0)))
+
+    assert(!player.gameOver && player2.gameOver)
+  }
 
 }

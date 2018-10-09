@@ -30,7 +30,7 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 	**/
 	def overLaps(ship: Ship): Boolean = {
 		/**
-			@param sq
+			@param sq: Square
 			@param list
 			check if the current square is equals to at list one square of the list 
 		**/
@@ -56,7 +56,7 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 
 	/**
 		* Check if the the
-		* @param square
+		* @param square: Square
 		* @return
 		*/
 	def isTouched(square: Square): Option[Square] = {
@@ -76,7 +76,7 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 
 	/**
 		* Check if the shot is closed to the boat
-		* @param square
+		* @param square: Square
 		* @return
 		*/
 	def inSight(square: Square): Boolean = {
@@ -95,7 +95,7 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 	/**
 		* Return a list of square that are a copy of the current position of the boat with all the
 		* position of the ship set to touched if they are equal to the square
-		* @param square
+		* @param square: Square
 		* @return
 		*/
 	def updateShip(square: Square): List[Square] = {
@@ -110,6 +110,13 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 		updateS(positions, square)
 	}
 
+  /**
+    * custom copy method
+    * @param positions: List of Square
+    * @param shipSize: size of the Ship
+    * @param shipName: ShipName
+    * @return
+    */
   def copy(positions: List[Square] = positions, shipSize: Int = shipSize, shipName: String = shipName): Ship
 
 	override def toString: String = {
@@ -127,28 +134,24 @@ object Ship{
 	/**
 		* The function doesn't check whether the ship fit the grid or not
 		* the verification needs to be done upstream
-		* @param x
-		* @param y
-		* @param orientation
+		* @param x: Char
+		* @param y: Int
+		* @param orientation: String
 		*/
 	def createList(x: Char, y: Int, orientation: String, size: Int, shipName: String): List[Square] = {
 		var newX: Char = x
 		var newY: Int = y
 
 		orientation.toUpperCase() match {
-			case "T" | "TOP" => { // top
-				newY -= 1
-			}
-			case "B" | "BOTTOM" => { // bottom
-				newY += 1
-			}
-			case "L" | "LEFT" => { // left
-				newX = (newX.toInt - 1).toChar // go to the previous letter
-			}
-			case "R" | "RIGHT" => { // right
-				newX = (newX.toInt + 1).toChar // go tho the next letter
-			}
-		}
+			case "T" | "TOP" => // top
+        newY -= 1
+      case "B" | "BOTTOM" => // bottom
+        newY += 1
+      case "L" | "LEFT" => // left
+        newX = (newX.toInt - 1).toChar // go to the previous letter
+      case "R" | "RIGHT" => // right
+        newX = (newX.toInt + 1).toChar // go tho the next letter
+    }
 
 		if (size == 0) Nil
 		else

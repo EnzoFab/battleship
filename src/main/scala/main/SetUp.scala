@@ -11,11 +11,11 @@ object SetUp {
 
   /**
     * Set up the navy of a player
-    * @param player
+    * @param player: The Player will set his navy
     * @return
     */
   def placeShip(player: Player,  random: Random): Player = {
-    print("\033[H\033[2J")
+    print("\033[H\033[2J") // clear the screen
     if (player.navy.size >= 5) player.myOwnCopy()
     else {
       var ship: Ship = null
