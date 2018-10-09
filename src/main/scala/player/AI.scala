@@ -115,10 +115,16 @@ case class AI(level : Int = 1,
     fourPreviousShotInt(playerShotRecord, 0, None)
   }
 
-  private def twoPreviousShotHasSucceded(playerShotRecord: List[Shot]): Option[Square] = {
-    // TODO
-    None
-  }
+  /*
+    * return two previous shit if they are successful
+    * @param playerShotRecord
+    * @return an option
+    */
+  /*private def twoPreviousShotHasSucceded(playerShotRecord: List[Shot]): Option[List[Shot]] = {
+    if (playerShotRecord.size < 2) None
+    else if (!playerShotRecord(0).hasTouch || !playerShotRecord(1).hasTouch) None
+    else Some(List(playerShotRecord.head, playerShotRecord.tail.head))
+  }*/
 
   private def placeTouched(square: Square, shotList: List[Shot]): Boolean = {
     if (shotList.isEmpty) false
@@ -154,9 +160,9 @@ object AI {
 
   /**
     * Random orientation for a ship according the the given parameter
-    * @param x
-    * @param y
-    * @param random
+    * @param x: Character
+    * @param y: A number
+    * @param random: Random object
     * @return
     */
   def randomAIOrientation(x: Char, y: Int, random: Random): String = {
@@ -214,6 +220,7 @@ object AI {
       val p1 = state.player1.asInstanceOf[AI] // cast into AI object
 
       val p2 = state.player2.asInstanceOf[AI]
+      print("\033[H\033[2J") // clear screen
       testAI(p1, p2, numberOfGame - 1, random)
     }
   }

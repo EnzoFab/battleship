@@ -11,6 +11,7 @@ object Game extends App {
 
 
   def play(gs: GameState, random: Random): GameState = {
+    print("\033[H\033[2J")
     println(s"${Console.BLINK}Game Start:${Console.RESET}\n\n")
     println(gs.player1.identifier + ": ")
 

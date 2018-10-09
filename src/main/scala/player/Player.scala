@@ -23,7 +23,7 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
 
   /**
     * Check if the ship given in parameter overlap a ship of the navy
-    * @param ship
+    * @param ship: A ship
     * @return
     */
   def overLaps(ship: Ship): Boolean = {
@@ -43,7 +43,7 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
 
   /**
     * Check if there is a ship at the given suqare
-    * @param square
+    * @param square: A square
     * @return
     */
   def hasTouched(square: Square): Option[Square] = {
@@ -62,7 +62,7 @@ abstract class Player(val navy: List[Ship], val playerShotRecord: List[Shot],
 
   /**
     * Check if the shot is closed to the boat
-    * @param square
+    * @param square: A Square
     * @return
     */
   def inSight(square: Square): Boolean = {

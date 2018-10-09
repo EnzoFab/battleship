@@ -30,18 +30,14 @@ object GameLoop {
 
       currentPlayer match {
         case p:  HPlayer => {
-          println(s" ${p.identifier} Please choose the letter of the column\n" +
-            "(Q: quit, P: display your grid): ")
+          Grid.displayNavy(currentPlayer.navy, currentPlayer.opponentShotRecord)
+          Grid.displayShotRecord(currentPlayer.playerShotRecord)
+          println(s"${Console.BOLD} ${p.identifier} Please choose the letter of the column\n" +
+            s"(Q: quit ): ${Console.RESET}")
           x = scala.io.StdIn.readChar
           x = x.toUpper
 
-          if (x == 'P') {
-            Grid.displayNavy(currentPlayer.navy, currentPlayer.opponentShotRecord)
-            Grid.displayShotRecord(currentPlayer.playerShotRecord)
-            // display the currentplayer grid and reload the game in the same state
-
-            battleLoop(currentPlayer, opponent, random)
-          }else if (x == 'Q'){
+         if (x == 'Q'){
             println("\nQuit !")
             Grid.displayNavy(currentPlayer.navy, currentPlayer.opponentShotRecord)
             println("\n\n")
@@ -60,6 +56,7 @@ object GameLoop {
             println("Sorry these coordinates aren't in the grid !")
             battleLoop(currentPlayer, opponent, random)
           }
+          print("\033[H\033[2J")
         }
         case p: AI => {
          square = p.computeTarget(random, p.level, p.playerShotRecord)

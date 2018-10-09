@@ -16,12 +16,12 @@ abstract class Ship(val positions: List[Square], val shipSize: Int, val shipName
 	A ship is sunk if all its square are touched
 		**/
 	def isSunk: Boolean = {
-		def isSinkInt(l: List[Square]): Boolean = {
+		def isSunkInt(l: List[Square]): Boolean = {
 			if(l.tail.isEmpty) l.head.isTouched
-			else l.head.isTouched && isSinkInt(l.tail)
+			else l.head.isTouched && isSunkInt(l.tail)
 		}
 
-		isSinkInt(positions)
+		isSunkInt(positions)
 	}
 
 	/**

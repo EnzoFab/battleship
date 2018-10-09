@@ -9,7 +9,7 @@ object Grid {
 
   /**
     * A ship is conform if all its square belongs to the grid
-    * @param ship
+    * @param ship: A ship
     * @return
     */
   def isConform(ship: Ship): Boolean = {
@@ -61,9 +61,9 @@ object Grid {
 
     /**
       * fill the matrix with squares
-      * @param matrix
-      * @param i
-      * @param j
+      * @param matrix: A two dimension array
+      * @param i: column index
+      * @param j: row index
       * @return
       */
     def fillMatrix(matrix: Array[Array[Square]], i: Int, j: Int): Array[Array[Square]] = {
